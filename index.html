@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Auto Grading</title>
+</head>
+
+<body>
+    <input type="file" name="file" id="file" webkitdirectory directory multiple>
+
+
+    <div id="codes"> </div>
+
+
+    <script type="text/javascript" src="grid.js"></script>
+    <script type="text/javascript" src="version.js"></script>
+    <script type="text/javascript" src="detector.js"></script>
+    <script type="text/javascript" src="formatinf.js"></script>
+    <script type="text/javascript" src="errorlevel.js"></script>
+    <script type="text/javascript" src="bitmat.js"></script>
+    <script type="text/javascript" src="datablock.js"></script>
+    <script type="text/javascript" src="bmparser.js"></script>
+    <script type="text/javascript" src="datamask.js"></script>
+    <script type="text/javascript" src="rsdecoder.js"></script>
+    <script type="text/javascript" src="gf256poly.js"></script>
+    <script type="text/javascript" src="gf256.js"></script>
+    <script type="text/javascript" src="decoder.js"></script>
+    <script type="text/javascript" src="qrcode.js"></script>
+    <script type="text/javascript" src="findpat.js"></script>
+    <script type="text/javascript" src="alignpat.js"></script>
+    <script type="text/javascript" src="databr.js"></script>
+    <script>
+
+
+
+
+
+
+        var QRArray = [];
+        var HTMLfile = document.getElementById("file")
+        HTMLfile.addEventListener('change', (e) => {
+
+            file = HTMLfile.files
+            for (i = 0; i < file.length; i++) {
+                QRArray.push(file[i].name)
+            }
+
+            var lst = "<OL>"
+            for (var i = 0; i < QRArray.length; i++) {
+
+                var x = "<img src='" + QRArray[i] + "' width='100px' height='100px'/>"
+                lst += "<li> " + x + "<h4> " + QRArray[i] + "</h4>"
+                lst += "<a  target='_blank' id='" + QRArray[i] + "'> link to form </a>" + "</li> <hr/>"
+
+            }
+
+            lst += "</ol>"
+            document.getElementById("codes").innerHTML = lst;
+
+            var url = new Array()
+
+            for (i = 0; i < QRArray.length; i++) {
+
+
+                qrcode.callback = async function (data) {
+                    await url.push(data)
+                }
+                qrcode.decode(QRArray[i])
+            }
+
+
+            console.log(url + " " +url.length)
+           
+            for (i = 0; i < QRArray.length; i++) {
+                //console.log(document.getElementById(QRArray[i]))
+                document.getElementById(QRArray[i]).href =  url[i]
+                //console.log(url.pop)
+            }
+
+
+        })
+    </script>
+</body>
+
+</html>
